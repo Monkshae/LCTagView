@@ -23,7 +23,7 @@
 @property (nonatomic, strong) UICollectionView *collectionView;
 @property (nonatomic, weak) id <LCTagViewDelegate>delegate;
 @property (nonatomic, strong) NSMutableArray *dataArray;
-@property (nonatomic, assign) BOOL maxCount;
+@property (nonatomic, assign) NSUInteger maxCount;
 - (void)updateData;
 @end
 

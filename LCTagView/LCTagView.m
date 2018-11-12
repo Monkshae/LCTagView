@@ -50,6 +50,7 @@ static NSString *const kLCTagsViewCellIdentifier = @"LCTagsViewCell";
         }];
         self.dataArray = [[NSMutableArray alloc]init];
         _needAdd = YES;
+        self.maxCount = 5;
     }
     return self;
 }
@@ -62,7 +63,7 @@ static NSString *const kLCTagsViewCellIdentifier = @"LCTagsViewCell";
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     LCTagViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kLCTagsViewCellIdentifier forIndexPath:indexPath];
-    if ((self.dataArray.count < 5) && indexPath.row == self.dataArray.count) {
+    if ((self.dataArray.count < self.maxCount) && indexPath.row == self.dataArray.count) {
         NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithString:@"添加" attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:12],NSForegroundColorAttributeName:[UIColor colorWithRed:149/255.0 green:148/255.0 blue:157/255.0 alpha:1]}];
         cell.tagLabel.attributedText = text;
         cell.contentView.backgroundColor = UIColor.whiteColor;
@@ -78,7 +79,7 @@ static NSString *const kLCTagsViewCellIdentifier = @"LCTagsViewCell";
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayot sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
-    if ((self.dataArray.count < 5) && indexPath.row == self.dataArray.count) {
+    if ((self.dataArray.count < self.maxCount) && indexPath.row == self.dataArray.count) {
         return CGSizeMake(57, 30);
     } else {
         NSInteger row = indexPath.row;
@@ -100,7 +101,7 @@ static NSString *const kLCTagsViewCellIdentifier = @"LCTagsViewCell";
 }
 
 - (void)updateData {
-    if (self.dataArray.count == 5) {
+    if (self.dataArray.count == self.maxCount) {
         self.needAdd = NO;
     } else {
         self.needAdd = YES;
