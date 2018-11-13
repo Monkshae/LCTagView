@@ -9,10 +9,6 @@
 #import "LCTagView.h"
 #import "UICollectionViewLeftAlignedLayout.h"
 
-@interface LCTagViewCell : UICollectionViewCell
-@property (nonatomic, strong) UILabel *tagLabel;
-@end
-
 @implementation LCTagViewCell
 
 - (instancetype)initWithFrame:(CGRect)frame {
@@ -37,7 +33,8 @@
 static NSString *const kLCTagsViewCellIdentifier = @"LCTagsViewCell";
 
 @interface LCTagView ()<UICollectionViewDataSource, UICollectionViewDelegate>
-@property (nonatomic, getter=isNeedAdd) BOOL needAdd;
+@property(nonatomic, getter=isNeedAdd) BOOL needAdd;
+@property(nonatomic, strong)UICollectionViewLeftAlignedLayout *flowLayout;
 @end
 
 @implementation LCTagView
@@ -51,8 +48,17 @@ static NSString *const kLCTagsViewCellIdentifier = @"LCTagsViewCell";
         self.dataArray = [[NSMutableArray alloc]init];
         _needAdd = YES;
         self.maxCount = 5;
+        
     }
     return self;
+}
+
+- (void)setLineSpacing:(CGFloat)lineSpacing {
+    self.flowLayout.minimumLineSpacing = lineSpacing;
+}
+
+- (void)setInteritemSpacing:(CGFloat)interitemSpacing {
+    self.flowLayout.minimumInteritemSpacing = interitemSpacing;
 }
 
 #pragma mark -- UICollectionViewDelegate
@@ -80,12 +86,14 @@ static NSString *const kLCTagsViewCellIdentifier = @"LCTagsViewCell";
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayot sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
     if ((self.dataArray.count < self.maxCount) && indexPath.row == self.dataArray.count) {
-        return CGSizeMake(57, 30);
+        //添加按钮的大小
+        return CGSizeMake(57, 45);
     } else {
         NSInteger row = indexPath.row;
         NSAttributedString *title = self.dataArray[row];
         CGSize size =  [title size];
-        return CGSizeMake(size.width + 16 * 2, 30);
+        //文字的长度+左右边距
+        return CGSizeMake(size.width + 16 * 2, 45);
     }
 }
 
@@ -100,6 +108,10 @@ static NSString *const kLCTagsViewCellIdentifier = @"LCTagsViewCell";
     }
 }
 
+- (void)layoutSubviews {
+    [super layoutSubviews];
+}
+
 - (void)updateData {
     if (self.dataArray.count == self.maxCount) {
         self.needAdd = NO;
@@ -110,11 +122,11 @@ static NSString *const kLCTagsViewCellIdentifier = @"LCTagsViewCell";
     [self layoutIfNeeded];
     CGFloat height = 0;
     //一行的时候self.collectionView.contentSize.height = 30
-    if (self.collectionView.contentSize.height < 45) {
-        height = 45;
-    } else {
-        height = self.collectionView.contentSize.height + 15;
-    }
+//    if (self.collectionView.contentSize.height < 45) {
+//        height = 45;
+//    } else {
+        height = self.collectionView.contentSize.height;
+//    }
     
     [self mas_updateConstraints:^(MASConstraintMaker *make) {
         make.height.mas_equalTo(height);
@@ -126,11 +138,7 @@ static NSString *const kLCTagsViewCellIdentifier = @"LCTagsViewCell";
 
 - (UICollectionView *)collectionView {
     if (!_collectionView) {
-        UICollectionViewLeftAlignedLayout *flowLayout=[[UICollectionViewLeftAlignedLayout alloc] init];
-        flowLayout.minimumLineSpacing = 15;
-        flowLayout.minimumInteritemSpacing = 15;
-        flowLayout.sectionInset = UIEdgeInsetsMake(0, 0, 0, 0);
-        _collectionView = [[UICollectionView alloc]initWithFrame: CGRectZero collectionViewLayout:flowLayout];
+        _collectionView = [[UICollectionView alloc]initWithFrame: CGRectZero collectionViewLayout:self.flowLayout];
         _collectionView.backgroundColor = UIColor.whiteColor;
         _collectionView.delegate = self;
         _collectionView.dataSource  = self;
@@ -140,4 +148,13 @@ static NSString *const kLCTagsViewCellIdentifier = @"LCTagsViewCell";
     return _collectionView;
 }
 
+- (UICollectionViewLeftAlignedLayout *)flowLayout {
+    if (!_flowLayout) {
+        _flowLayout = [[UICollectionViewLeftAlignedLayout alloc] init];
+        _flowLayout.minimumLineSpacing = 15;
+        _flowLayout.minimumInteritemSpacing = 15;
+        _flowLayout.sectionInset = UIEdgeInsetsMake(0, 0, 0, 0);
+    }
+    return _flowLayout;
+}
 @end

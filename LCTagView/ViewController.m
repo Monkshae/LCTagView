@@ -34,6 +34,7 @@
     }];
 }
 
+
 - (void)tagView:(LCTagView *)tagView didSelectAtIndex:(NSInteger)index {
    NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithString:@"我是一个标签" attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:12],NSForegroundColorAttributeName:[UIColor colorWithRed:149/255.0 green:148/255.0 blue:157/255.0 alpha:1]}];
     [self.tagView.dataArray addObject:text];
@@ -41,9 +42,8 @@
 }
 
 - (void)tagView:(LCTagView *)tagView height:(CGFloat)height {
-    _tagCellHeight = height + 15;
+    _tagCellHeight = height;
     [self.view layoutIfNeeded];
 }
-
 
 @end
