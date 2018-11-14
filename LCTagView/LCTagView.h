@@ -27,6 +27,8 @@ typedef NS_ENUM(NSInteger, LCAddPostionType) {
 
 - (CGSize)tagView:(LCTagView *)tagView sizeForAddAtIndex:(NSInteger )index;
 
+- (void)tagView:(LCTagView *)tagView estimatedHeight:(CGFloat)estimatedHeight;
+
 @end
 
 @interface LCTagView : UIView

@@ -227,6 +227,10 @@ static NSString *const kLCTagsViewCellIdentifier = @"LCTagsViewCell";
     }];
     if (completion) {
         completion(height);
+    } else {
+        if ([self.delegate respondsToSelector:@selector(tagView:estimatedHeight:)]) {
+            [self.delegate tagView:self estimatedHeight:height];
+        }
     }
 }
 
